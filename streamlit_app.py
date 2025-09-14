@@ -6,9 +6,9 @@ import plotly.express as px
 from plotly.subplots import make_subplots
 import random
 
-st.set_page_config(page_title="釣り銭シミュレーション", layout="wide")
+st.set_page_config(page_title="シミュレーション②釣り銭のシミュレーション", layout="wide")
 
-st.title("釣り銭のシミュレーション")
+st.title("シミュレーション②釣り銭のシミュレーション（pp.91-93）")
 st.caption("Created by Dit-Lab.(Daiki ITO)")
 st.caption("Supported by Tomoaki ATSUMI")
 
