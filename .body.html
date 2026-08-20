@@ -1,0 +1,136 @@
+  <section class="step" id="step1">
+    <h2><span class="no">STEP 1</span>乱数で支払い方を決める</h2>
+    <p class="desc">客がどのパターンで払うかを<span class="term" data-t="乱数">乱数</span>で決めます。これが<span class="term" data-t="確率的モデル">確率的モデル</span>です。</p>
+
+    <div class="panel">
+      <h3>シミュレーションの条件（本文と同じ）</h3>
+      <div class="tbl-scroll">
+        <table class="tbl">
+          <thead><tr><th>パターン</th><th>支払い方法</th><th>割合</th><th>乱数の範囲</th><th>釣り銭</th></tr></thead>
+          <tbody>
+            <tr><td>a</td><td>100円3枚</td><td>50％</td><td class="mono">0 以上 0.5 未満</td><td>なし</td></tr>
+            <tr><td>b</td><td>500円1枚</td><td>30％</td><td class="mono">0.5 以上 0.8 未満</td><td>100円2枚</td></tr>
+            <tr><td>c</td><td>1000円1枚</td><td>20％</td><td class="mono">0.8 以上 1 未満</td><td>500円が1枚以上あるとき：500円1枚と100円2枚<br>500円が1枚未満のとき：100円7枚</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="why" style="margin-top:10px">商品はすべて300円、1人1個まで、全部で100個。釣り銭が足りないときは<strong>マイナスの枚数</strong>で表します。</p>
+
+      <div class="grid c2" style="margin-top:16px">
+        <div>
+          <div class="dice" id="dice">—<small>ボタンを押すと乱数を1つ作ります</small></div>
+          <div class="patwrap">
+            <div class="patbar" id="patbar">
+              <span style="width:50%;background:#123a6b">a 50%</span>
+              <span style="width:30%;background:#8a5a00">b 30%</span>
+              <span style="width:20%;background:#1f7a3d">c 20%</span>
+              <span class="marker" id="marker" style="left:0"></span>
+            </div>
+          </div>
+          <div class="btn-row" style="margin-top:12px">
+            <button class="btn primary" id="roll">乱数を1つ作る</button>
+            <button class="btn ghost" id="roll20">20回まとめて</button>
+          </div>
+        </div>
+        <div>
+          <div class="note" id="diceNote">乱数が0.5未満ならパターンa、0.5以上0.8未満ならb、0.8以上ならcです。</div>
+          <div class="tbl-scroll" style="margin-top:12px"><table class="tbl" id="rollTable"></table></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="step" id="step2">
+    <h2><span class="no">STEP 2</span>釣り銭の枚数を1人ずつ追う</h2>
+    <p class="desc">本文と同じ乱数（0.529 → 0.171 → 0.871）で進めます。<strong>店員の手元にある釣り銭の枚数</strong>がどう変わるか、自分で予想してから進めてください。</p>
+
+    <div class="panel">
+      <div class="coins" id="coins"></div>
+      <div class="stepbox" id="stepBox" style="margin-top:12px;border:1px solid var(--rule);background:var(--paper);padding:14px;font-family:var(--mono);font-size:.92rem;line-height:2"></div>
+      <div class="btn-row" style="margin-top:12px">
+        <button class="btn primary" id="nextCust">次の客へ ▶</button>
+        <button class="btn ghost" id="resetCust">最初から</button>
+        <span class="badge" id="custBadge"></span>
+      </div>
+      <div class="tbl-scroll" style="margin-top:14px"><table class="tbl" id="simTable"></table></div>
+      <div class="note info" style="margin-top:12px">
+        本文の【ア】〜【オ】の答えは <span class="mono">−2、1、1、−1、0</span> です。上の表と見比べて確かめましょう。
+      </div>
+    </div>
+  </section>
+
+  <section class="step" id="step3">
+    <h2><span class="no">STEP 3</span>100人分を一気に実行する</h2>
+    <p class="desc">実行のたびに結果が変わります。<strong>何度か実行して、どんなときに釣り銭が不足するのか</strong>を見てください。</p>
+    <div class="panel">
+      <div class="grid c2">
+        <div>
+          <label class="fld" for="init100">はじめに用意する100円玉：<span class="mono" id="init100V">0</span> 枚</label>
+          <input type="range" id="init100" min="0" max="60" step="1" value="0">
+          <label class="fld" style="margin-top:10px" for="init500">はじめに用意する500円玉：<span class="mono" id="init500V">0</span> 枚</label>
+          <input type="range" id="init500" min="0" max="40" step="1" value="0">
+          <label class="fld" style="margin-top:10px" for="nCust">客の人数：<span class="mono" id="nCustV">100</span> 人</label>
+          <input type="range" id="nCust" min="20" max="200" step="10" value="100">
+          <div class="btn-row" style="margin-top:12px">
+            <button class="btn primary" id="run100">実行する</button>
+            <button class="btn" id="run100x">100回くり返して調べる</button>
+          </div>
+        </div>
+        <div>
+          <div class="metrics">
+            <div class="metric"><div class="k">100円の最小</div><div class="v" id="min100">—</div><div class="s">枚</div></div>
+            <div class="metric"><div class="k">500円の最小</div><div class="v" id="min500">—</div><div class="s">枚</div></div>
+            <div class="metric"><div class="k">不足が起きた回数</div><div class="v" id="shortCnt">—</div><div class="s">回</div></div>
+          </div>
+          <div class="note" id="runNote" style="margin-top:14px">「実行する」を押してください。</div>
+        </div>
+      </div>
+      <div id="runChart" style="margin-top:14px"></div>
+      <div class="toolbar" id="runTools"></div>
+    </div>
+  </section>
+
+  <section class="step" id="step4">
+    <h2><span class="no">STEP 4</span>何枚用意すれば足りるか</h2>
+    <p class="desc">1回の結果では決められません。<strong>100回くり返して、不足しなかった割合</strong>から必要枚数を決めます。</p>
+    <div class="panel">
+      <div class="btn-row">
+        <button class="btn primary" id="findNeed">必要な枚数を調べる（各条件100回ずつ）</button>
+      </div>
+      <div class="note" id="needNote" hidden style="margin-top:12px"></div>
+      <div class="tbl-scroll" style="margin-top:12px"><table class="tbl" id="needTable"></table></div>
+    </div>
+  </section>
+
+  <section class="step" id="step5">
+    <h2><span class="no">STEP 5</span>確認クイズ</h2>
+    <div class="panel">
+      <div class="qhead">
+        <span class="badge" id="qProgress">1 / 1</span>
+        <span class="badge">正解 <span class="score" id="qScore">0</span></span>
+      </div>
+      <div class="card-q"><div class="q-scene" id="qText"></div></div>
+      <div class="choice4" id="qChoices"></div>
+      <div class="note" id="qFb" hidden style="margin-top:12px"></div>
+      <div class="btn-row" style="margin-top:12px">
+        <button class="btn primary" id="qNext" disabled>次の問題</button>
+        <button class="btn ghost" id="qReset">最初から</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="step" id="glossary">
+    <h2><span class="no">用語</span>この節で出てくることば</h2>
+    <div id="glossBox"></div>
+  </section>
+
+  <section class="step">
+    <h2><span class="no">まとめ</span>釣り銭シミュレーションのポイント</h2>
+    <ul style="margin:0;padding-left:1.2em;color:var(--ink-2);font-size:.92rem;line-height:2.05">
+      <li>乱数と割合の対応は<strong>累積で区切る</strong>。50％・30％・20％なら 0〜0.5、0.5〜0.8、0.8〜1。</li>
+      <li>釣り銭は<strong>受け取った硬貨が増え、渡した硬貨が減る</strong>。両方を同時に追う。</li>
+      <li>確率的モデルなので<strong>実行のたびに結果が変わる</strong>。1回の結果で判断しない。</li>
+      <li>「何枚用意すれば足りるか」は、<strong>何回もくり返して不足しない割合</strong>から決める。</li>
+      <li>割合の設定（昨年の記録など）が現実と合っているかが、結果の信頼性を左右する。</li>
+    </ul>
+  </section>
